@@ -1,43 +1,65 @@
 const moment = require("moment");
 
-const createLinuxDay = day => {
-  return moment()
-    .year(2016)
-    .dayOfYear(day)
-    .startOf("day")
-    .unix();
+const isLeapYear = year => {
+  year = Number(year);
+  if (year % 100 === 0) {
+    if (year % 400 === 0) {
+      return true;
+    }
+    return false;
+  }
+  return year % 4 === 0;
 };
 
-const findFirstPriceOfYear = prices => {
+const createDay = (day, year) => {
+  return moment()
+    .year(year)
+    .dayOfYear(day)
+    .startOf("day")
+    .format()
+    .split("T")[0];
+};
+
+const findFirstPriceOfYear = (prices, year) => {
   let dayOfYear = 1;
-  while (!prices[createLinuxDay(dayOfYear++)])
-    return prices[createLinuxDay(dayOfYear)];
+  while (!prices[createDay(dayOfYear, year)]) {
+    dayOfYear++;
+  }
+  return prices[createDay(dayOfYear, year)];
 };
 
 const extractPricesIntoObject = ticker => {
   return ticker.dataset.data.reduce((pricesObject, [date, price]) => {
-    pricesObject[moment(date).unix()] = price;
+    pricesObject[date] = price;
     return pricesObject;
   }, {});
 };
 
-const gatherAndPopulatePrices = ticker => {
+const gatherAndPopulatePrices = (ticker, year) => {
   const prices = extractPricesIntoObject(ticker);
-  let lastKnownPrice = findFirstPriceOfYear(prices);
-  const lengthOfYear = 365 + 1;
-  Array(lengthOfYear).forEach((_, dayOfYear) => {
+  let lastKnownPrice = findFirstPriceOfYear(prices, year);
+  console.log(lastKnownPrice);
+  const lengthOfYear = isLeapYear(year) ? 366 : 365;
+  let newPrices = {};
+  [...Array(lengthOfYear)].forEach((_, dayOfYear) => {
     ++dayOfYear;
-    prices[createLinuxDay(dayOfYear)] =
-      prices[createLinuxDay(dayOfYear)] || lastKnownPrice;
+    if (prices[createDay(dayOfYear, year)]) {
+      newPrices[createDay(dayOfYear, year)] =
+        prices[createDay(dayOfYear, year)];
+      lastKnownPrice = newPrices[createDay(dayOfYear, year)];
+    } else {
+      newPrices[createDay(dayOfYear, year)] = lastKnownPrice;
+    }
   });
-  return prices;
+  return newPrices;
 };
 
-const gatherPricesListedByTicker = stockData => {
+const gatherPricesListedByTicker = (stockData, year) => {
   let pricesByTicker = {};
   for (let ticker of stockData) {
     pricesByTicker[ticker.dataset.dataset_code] = gatherAndPopulatePrices(
-      ticker
+      ticker,
+      year
     );
   }
   return pricesByTicker;
@@ -58,36 +80,16 @@ const gatherPricesListedByDate = (pricesByTicker, dates, tickers) => {
   return pricesByDate;
 };
 
-const validateStartDate = startDate => {
-  if (typeof startDate !== "string") {
-    throw new Error("Dates must be a string in 'yyyy-mm-dd' format.");
+const validateYear = year => {
+  if (typeof year !== "string") {
+    throw new Error("Year must be a string in 'yyyy' format.");
   }
-  if (
-    !/[0-9]{4}/.test(Number(startDate.slice(0, 4))) ||
-    !/[0-9]{1}/.test(Number(startDate.slice(5, 6))) ||
-    !/[0-9]{1}/.test(Number(startDate.slice(6, 7))) ||
-    !/[0-9]{1}/.test(Number(startDate.slice(8, 9))) ||
-    !/[0-9]{1}/.test(Number(startDate.slice(9, 10)))
-  ) {
-    throw new Error("Dates must be a string in 'yyyy-mm-dd' format.");
+  if (!/[0-9]{4}/.test(Number(year))) {
+    throw new Error("Year must be a string in 'yyyy' format.");
   }
-  return startDate;
+  return year.toString();
 };
-const validateEndDate = endDate => {
-  if (typeof endDate !== "string") {
-    throw new Error("Dates must be a string in 'yyyy-mm-dd' format.");
-  }
-  if (
-    !/[0-9]{4}/.test(Number(endDate.slice(0, 4))) ||
-    !/[0-9]{1}/.test(Number(endDate.slice(5, 6))) ||
-    !/[0-9]{1}/.test(Number(endDate.slice(6, 7))) ||
-    !/[0-9]{1}/.test(Number(endDate.slice(8, 9))) ||
-    !/[0-9]{1}/.test(Number(endDate.slice(9, 10)))
-  ) {
-    throw new Error("Dates must be a string in 'yyyy-mm-dd' format.");
-  }
-  return endDate;
-};
+
 const validateTickers = tickers => {
   if (!Array.isArray(tickers)) {
     throw new Error(
@@ -106,39 +108,36 @@ const validateTickers = tickers => {
   }
   return tickers;
 };
-const validateEodApiData = eodApiData => {
-  if (!eodApiData) {
+const validateEodData = eodData => {
+  if (!eodData) {
     throw new Error(
-      "EodApiData could not be set. Did you enter in the correct format?"
+      "EodData could not be set. Did you enter in the correct format?"
     );
   }
-  if (!eodApiData[0]) {
+  if (!eodData[0]) {
     throw new Error(
-      "EodApiData could not be set. Did you enter in the correct format?"
+      "EodData could not be set. Did you enter in the correct format?"
     );
   }
-  if (!eodApiData[0].dataset) {
+  if (!eodData[0].dataset) {
     throw new Error(
-      "EodApiData could not be set. Did you enter in the correct format?"
+      "EodData could not be set. Did you enter in the correct format?"
     );
   }
-  if (
-    !eodApiData[0].dataset.data ||
-    !Array.isArray(eodApiData[0].dataset.data)
-  ) {
+  if (!eodData[0].dataset.data || !Array.isArray(eodData[0].dataset.data)) {
     throw new Error(
-      "EodApiData could not be set. Did you enter in the correct format?"
+      "EodData could not be set. Did you enter in the correct format?"
     );
   }
-  return eodApiData;
+  return eodData;
 };
 
 module.exports = {
   gatherPricesListedByDate,
   gatherPricesListedByTicker,
   getDates,
-  validateEodApiData,
+  validateEodData,
   validateTickers,
-  validateEndDate,
-  validateStartDate
+  validateYear,
+  isLeapYear
 };

@@ -1,6 +1,6 @@
 {
   "name": "quandl-eod-helper",
-  "version": "1.0.0",
+  "version": "1.2.0",
   "description":
     "Easily fetch and parse data from the Quandl api using database_code EOD.",
   "main": "index.js",

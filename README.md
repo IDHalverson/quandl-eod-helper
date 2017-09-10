@@ -8,9 +8,11 @@ Consult the Quandl time-series API Docs for information on the API:
 `https://docs.quandl.com/docs/time-series`
 
 This module parses response data into the following format. Future
-versions may support other schemas and/or file types.
+versions may support other schemas and/or file types. It also parses the data
+such that weekends and holidays will be populated with the stock price data from
+the last day from which data is available.
 
-Format:
+Format (full example is shown at bottom of README):
 ```
 {
   dataTypes: [...],
@@ -43,23 +45,16 @@ Directions for getting started:
 
 **Install the following dependencies:**
 
-- isomorphic-fetch:
+- isomorphic-fetch, dot-env, moment:
 ```
 npm install isomorphic-fetch
-```
-
-- dot-env:
-```
 npm install dot-env
-```
-
-- moment:
-```
 npm install moment
 ```
 
 **Place your Quandl api key in a `.env` file.**
 
+root/.env
 ```
 QUANDL_API_KEY=YOUR_KEY
 ```
@@ -67,48 +62,47 @@ QUANDL_API_KEY=YOUR_KEY
 **Require the module, and instantiate a new `Eod` instance.**
 
 ```
-const quandlEodApiHelper = require('quandl-eod-helper')
-const Eod = new quandlEodApiHelper()
+const quandlEodHelper = require('quandl-eod-helper')
+const Eod = new quandlEodHelper()
 ```
 
 **Configure the `Eod` instance to your preferences.**
 
-All parameters are optional and will provide minimal default values if
-passed no value or `undefined`.
+All configurations are optional and will provide minimal default values; however,
+the helper will throw an error if you attempt to parse (using Eod.data()) without
+either passing in properly formatted data or fetching first.
 
 ```
-const startDate = '2016-01-01'
+const year = '2016'
 ````
-yyyy-mm-dd string format
-```
-const endDate = '2016-01-06'
-````
-yyyy-mm-dd string format
+...yyyy string format
+
 ```
 const tickers = ['AAPL', 'MSFT']
 ````
-array of tickers... check the Quandl Docs for available options.
+...as an array of tickers... check the Quandl Docs for available options.
 ```
-const eodApiData = {}
+const eodData = {}
 ```
-option to input your own API response data if you do not want to use
+...an option to input your own API response data if you do not want to use
 this module's native 'fetch' method.
 
 ```
-Eod.config(startDate, endDate, tickers)
+Eod.config(year, tickers)
 ```
-example of the config method...
-note we are not passing in the optional eodApiData parameter
+```
+const Eod = new quandleEodHelper(year, tickers)
+```
+...example of configuration using the constructor or the `config()` method.
+Note: we are not passing in the optional eodData parameter.
 
 
 You can also configure parameters one at a time...
 
 ```
-Eod.setStartDate(startDate)
-Eod.setEndDate(endDate)
-Eod.setDateRange(startDate, endDate)
+Eod.setYear(year)
 Eod.setTickers(tickers)
-Eod.setEodApiData(eodApiData)
+Eod.setEodData(eodData)
 ```
 
 **Fetch the data from Quandl.**
@@ -124,9 +118,10 @@ Note: If you configured your own Quandl API data, you can use Eod.data() now (sk
 
 Example response from our configurations:
 ```
-console.log(Eod.data())
+const data = Eod.data()
+console.log(data)
 ```
-should return:
+result:
 ```
 {
   dataTypes: [
@@ -140,35 +135,39 @@ should return:
     "MSFT"
     ],
   dates: [
-    "1451883600",
-    "1451970000",
-    "1452056400"
+    "2016-01-01",
+    "2016-01-02",
+    "2016-01-03",
+    etc...
     ],
   pricesByTicker: {
     AAPL: {
-      1451883600: 105.35,
-      1451970000: 102.71,
-      1452056400: 100.7
+      2016-01-01: 105.35,
+      2016-01-02: 102.71,
+      2016-01-03: 100.7,
+      etc...
       },
     MSFT: {
-      1451883600: 54.8,
-      1451970000: 55.05,
-      1452056400: 54.05
+      2016-01-01: 54.8,
+      2016-01-02: 55.05,
+      2016-01-03: 54.05,
+      etc...
     }
   },
   pricesByDate: {
-    1451883600: {
+    2016-01-01: {
       AAPL: 105.35,
-      MSFT: 54.8
+      MSFT: 54.8,
       },
-    1451970000: {
+    2016-01-02: {
       AAPL: 102.71,
       MSFT: 55.05
       },
-    1452056400: {
+    2016-01-03: {
       AAPL: 100.7,
       MSFT: 54.05
-      }
+      },
+    etc...
   }
 }
 ```

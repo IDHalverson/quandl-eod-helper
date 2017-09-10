@@ -3,64 +3,76 @@ const {
   gatherPricesListedByDate,
   gatherPricesListedByTicker,
   getDates,
-  validateEodApiData,
+  validateEodData,
   validateTickers,
-  validateEndDate,
-  validateStartDate
+  validateYear
 } = require("./util/parser");
 
 class Eod {
   constructor(
-    startDate = "2016-01-01",
-    endDate = "2016-12-31",
-    tickers = ["TEST"],
-    eodApiData = [
-      {
-        dataset: {
-          dataset_code: "TEST",
-          data: [["2016-01-01", 1], ["2016-01-02", 2]]
+    {
+      year = "2016",
+      tickers = ["AAPL"],
+      eodData = [
+        {
+          dataset: {
+            dataset_code: "AAPL",
+            data: [["2016-01-01", 1], ["2016-01-02", 2]]
+          }
         }
-      }
-    ]
+      ]
+    } = {
+      year: "2016",
+      tickers: ["AAPL"],
+      eodData: [
+        {
+          dataset: {
+            dataset_code: "AAPL",
+            data: [["2016-01-01", 1], ["2016-01-02", 2]]
+          }
+        }
+      ]
+    }
   ) {
-    this.startDate = startDate;
-    this.endDate = endDate;
+    this.year = year;
     this.tickers = tickers;
-    this.eodApiData = eodApiData;
+    this.eodData = eodData;
 
-    this.parsedEodApiDate = {};
+    this.parsedEodApiDate = false;
   }
 
   config(
-    startDate = "2016-01-01",
-    endDate = "2016-12-31",
-    tickers = ["TEST"],
-    eodApiData = [
-      {
-        dataset: {
-          dataset_code: "TEST",
-          data: [["2016-01-01", 1], ["2016-01-02", 2]]
+    {
+      year = "2016",
+      tickers = ["AAPL"],
+      eodData = [
+        {
+          dataset: {
+            dataset_code: "AAPL",
+            data: [["2016-01-01", 1], ["2016-01-02", 2]]
+          }
         }
-      }
-    ]
+      ]
+    } = {
+      year: "2016",
+      tickers: ["AAPL"],
+      eodData: [
+        {
+          dataset: {
+            dataset_code: "AAPL",
+            data: [["2016-01-01", 1], ["2016-01-02", 2]]
+          }
+        }
+      ]
+    }
   ) {
-    this.startDate = validateStartDate(startDate);
-    this.endDate = validateEndDate(endDate);
+    this.year = year;
     this.tickers = validateTickers(tickers);
-    this.eodApiData = validateEodApiData(eodApiData);
+    this.eodData = validateEodData(eodData);
   }
 
-  setDateRange(startDate, endDate) {
-    this.startDate = validateStartDate(startDate);
-    this.endDate = validateEndDate(endDate);
-  }
-
-  setStartDate(startDate) {
-    this.startDate = validateStartDate(startDate);
-  }
-
-  setEndDate(endDate) {
-    this.endDate = validateEndDate(endDate);
+  setYear(year) {
+    this.year = validateYear(year);
   }
 
   setTickers(tickers) {
@@ -68,14 +80,14 @@ class Eod {
   }
 
   fetch() {
-    fetcher(this.startDate, this.endDate, this.tickers).then(data => {
-      this.eodApiData = data;
+    fetcher(this.year, this.tickers).then(data => {
+      this.eodData = data;
       console.log(`Fetched ${data.length} stocks successfully!`);
     });
   }
 
   createDataObject() {
-    const pricesByTicker = gatherPricesListedByTicker(this.eodApiData);
+    const pricesByTicker = gatherPricesListedByTicker(this.eodData, this.year);
     const tickers = this.tickers;
     const dates = getDates(pricesByTicker, tickers);
     const pricesByDate = gatherPricesListedByDate(
@@ -84,7 +96,7 @@ class Eod {
       tickers
     );
 
-    this.parsedEodApiData = {
+    this.parsedEodData = {
       dataTypes: ["tickers", "dates", "pricesByTicker", "pricesByDate"],
       tickers,
       dates,
@@ -95,7 +107,7 @@ class Eod {
 
   data() {
     this.createDataObject();
-    return this.parsedEodApiData;
+    return this.parsedEodData;
   }
 }
 

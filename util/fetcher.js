@@ -2,6 +2,8 @@ require("dotenv").config();
 const QUANDL_API_KEY = process.env.QUANDL_API_KEY;
 const BASE_URL = "https://www.quandl.com/api/v3/datasets/EOD/";
 require("isomorphic-fetch");
+const { isLeapYear } = require("./parser");
+const moment = require("moment");
 
 const ensureFetch = async url => {
   const response = await fetch(url);
@@ -13,8 +15,22 @@ const ensureFetch = async url => {
   return await response.json();
 };
 
-const fetchData = async (startDate, endDate, tickers) => {
+const fetchData = async (year, tickers) => {
   try {
+    const startDate = moment()
+      .year(year)
+      .dayOfYear(1)
+      .startOf("day")
+      .format()
+      .split("T")[0];
+
+    const endDate = moment()
+      .year(year)
+      .dayOfYear(isLeapYear(year) ? 366 : 365)
+      .startOf("day")
+      .format()
+      .split("T")[0];
+
     const data = [];
     for (let ticker of tickers) {
       console.log("Fetching Stock: ", ticker);
