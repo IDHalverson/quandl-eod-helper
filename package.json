@@ -1,23 +1,20 @@
 {
-  "name": "quandle-eod-api-helper",
+  "name": "quandl-eod-api-helper",
   "version": "1.0.0",
-  "description": "Easily fetch and parse data from the Quandle EOD api.",
+  "description": "Easily fetch and parse data from the Quandl api using database_code EOD.",
   "main": "index.js",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/thebopshoobop/project_fideligard_spa.git"
+    "url": "git+https://github.com/IDHalverson/quandl-eod-api-helper"
   },
-  "author":
-    "Ian Halverson <HalversonCode@gmail.com> (http://idhalverson.github.io)",
+  "author": "Ian Halverson <HalversonCode@gmail.com> (http://idhalverson.github.io)",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/thebopshoobop/project_fideligard_spa/issues"
+    "url": "https://github.com/IDHalverson/quandl-eod-api-helper/issues"
   },
-  "homepage": "https://github.com/thebopshoobop/project_fideligard_spa#readme",
+  "homepage": "https://github.com/IDHalverson/quandl-eod-api-helper#readme",
   "dependencies": {
-    "concurrently": "^3.5.0",
     "dotenv": "^4.0.0",
-    "express": "^4.15.4",
     "isomorphic-fetch": "^2.2.1",
     "moment": "^2.18.1"
   }

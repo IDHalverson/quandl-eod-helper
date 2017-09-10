@@ -23,11 +23,31 @@ class Eod {
       }
     ]
   ) {
+    this.startDate = startDate;
+    this.endDate = endDate;
+    this.tickers = tickers;
+    this.eodApiData = eodApiData;
+
+    this.parsedEodApiDate = {};
+  }
+
+  config(
+    startDate = "2016-01-01",
+    endDate = "2016-12-31",
+    tickers = ["TEST"],
+    eodApiData = [
+      {
+        dataset: {
+          dataset_code: "TEST",
+          data: [["2016-01-01", 1], ["2016-01-02", 2]]
+        }
+      }
+    ]
+  ) {
     this.startDate = validateStartDate(startDate);
     this.endDate = validateEndDate(endDate);
     this.tickers = validateTickers(tickers);
     this.eodApiData = validateEodApiData(eodApiData);
-    this.parsedEodApiDate = {};
   }
 
   setDateRange(startDate, endDate) {
