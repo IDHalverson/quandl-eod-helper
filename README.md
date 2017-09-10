@@ -2,7 +2,7 @@
 #Quandl EOD Helper
 
 This module assists in extracting certain time-series stock data
-from the Quandl API using `database_code` EOD (End of Day).
+into a certain format (below) from the Quandl API using `database_code` EOD (End of Day).
 
 Consult the Quandl time-series API Docs for information on the API:
 `https://docs.quandl.com/docs/time-series`
