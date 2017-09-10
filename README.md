@@ -1,5 +1,5 @@
 
-#Quandl EOD API Helper
+#Quandl EOD Helper
 
 This module assists in extracting certain time-series stock data
 from the Quandl API using `database_code` EOD (End of Day).
@@ -41,44 +41,65 @@ Format:
 
 Directions for getting started:
 
-1. Install the following dependencies:
+**Install the following dependencies:**
 
 - isomorphic-fetch:
-`npm install isomorphic-fetch`
+```
+npm install isomorphic-fetch
+```
 
 - dot-env:
-`npm install dot-env`
+```
+npm install dot-env
+```
 
 - moment:
-`npm install moment`
+```
+npm install moment
+```
 
-2. Place your Quandl api key in a `.env` file.
+**Place your Quandl api key in a `.env` file.**
 
-`QUANDL_API_KEY=YOUR_KEY`
+```
+QUANDL_API_KEY=YOUR_KEY
+```
 
-3. Require the module to instantiate a new `Eod` instance.
+**Require the module, and instantiate a new `Eod` instance.**
 
-`const Eod = require('quandl-eod-api-helper')`
+```
+const quandlEodApiHelper = require('quandl-eod-helper')
+const Eod = new quandlEodApiHelper()
+```
 
-4. Configure the `Eod` instance to your preferences.
+**Configure the `Eod` instance to your preferences.**
 
 All parameters are optional and will provide minimal default values if
 passed no value or `undefined`.
+
 ```
 const startDate = '2016-01-01'
-// yyyy-mm-dd format
-const endDate = '2016-01-06'
-// yyyy-mm-dd format
-const tickers = ['AAPL', 'MSFT']
-// array of tickers... check the Quandl Docs for available options.
-const eodApiData = {}
-// option to input your own API response data if you do not want to use
-// this module's native 'fetch' method.
-
-Eod.config(startDate, endDate, tickers)
-// example of the config method...
-// note we are not passing in the optional eodApiData parameter
+````
+yyyy-mm-dd string format
 ```
+const endDate = '2016-01-06'
+````
+yyyy-mm-dd string format
+```
+const tickers = ['AAPL', 'MSFT']
+````
+array of tickers... check the Quandl Docs for available options.
+```
+const eodApiData = {}
+```
+option to input your own API response data if you do not want to use
+this module's native 'fetch' method.
+
+```
+Eod.config(startDate, endDate, tickers)
+```
+example of the config method...
+note we are not passing in the optional eodApiData parameter
+
 
 You can also configure parameters one at a time...
 
@@ -90,22 +111,22 @@ Eod.setTickers(tickers)
 Eod.setEodApiData(eodApiData)
 ```
 
-5. Fetch the data from Quandl.
+**Fetch the data from Quandl.**
 
 Data is stored within the `Eod` instance.
-`Eod.fetch()`
+```
+Eod.fetch()
+```
 
-6. Your data should now be available for use!
+**Your data should now be available for use, using the Eod.data() method!**
+
+Note: If you configured your own Quandl API data, you can use Eod.data() now (skip the previous 'fetch' step) to parse that data.
 
 Example response from our configurations:
 ```
-console.log(Eod.fetch())
+console.log(Eod.data())
 ```
-or
-```
-console.log(Eod.parsedEodApiData)
-```
-Both should return:
+should return:
 ```
 {
   dataTypes: [

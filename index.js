@@ -99,6 +99,4 @@ class Eod {
   }
 }
 
-const EodExport = new Eod();
-
-module.exports = EodExport;
+module.exports = Eod;

@@ -1,18 +1,20 @@
 {
-  "name": "quandl-eod-api-helper",
+  "name": "quandl-eod-helper",
   "version": "1.0.0",
-  "description": "Easily fetch and parse data from the Quandl api using database_code EOD.",
+  "description":
+    "Easily fetch and parse data from the Quandl api using database_code EOD.",
   "main": "index.js",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/IDHalverson/quandl-eod-api-helper"
+    "url": "git+https://github.com/IDHalverson/quandl-eod-helper"
   },
-  "author": "Ian Halverson <HalversonCode@gmail.com> (http://idhalverson.github.io)",
+  "author":
+    "Ian Halverson <HalversonCode@gmail.com> (http://idhalverson.github.io)",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/IDHalverson/quandl-eod-api-helper/issues"
+    "url": "https://github.com/IDHalverson/quandl-eod-helper/issues"
   },
-  "homepage": "https://github.com/IDHalverson/quandl-eod-api-helper#readme",
+  "homepage": "https://github.com/IDHalverson/quandl-eod-helper#readme",
   "dependencies": {
     "dotenv": "^4.0.0",
     "isomorphic-fetch": "^2.2.1",
