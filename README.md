@@ -3,7 +3,7 @@
 
 See it on [NPM](https://www.npmjs.com/package/quandl-eod-helper)
 
-Fetch, extract and parse time-series stock data from the [Quandl](https://www.quandl.com/) API (only `database_code` EOD supported). It also fills the data
+Fetch, extract and parse time-series stock data from the [Quandl](https://www.quandl.com/) API (only `database_code` EOD supported). This package also fills the data
 such that weekends and holidays will be populated with the stock price data from
 the last day from which data is available. Future
 versions may support different schemas, file types, and/or database_codes.
