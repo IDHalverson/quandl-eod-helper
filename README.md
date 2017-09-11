@@ -1,18 +1,17 @@
 
-#Quandl EOD Helper
+# Quandl EOD Helper
 
-This module assists in extracting certain time-series stock data
-into a certain format (below) from the Quandl API using `database_code` EOD (End of Day).
+See it on [NPM](https://www.npmjs.com/package/quandl-eod-helper)
 
-Consult the Quandl time-series API Docs for information on the API:
-`https://docs.quandl.com/docs/time-series`
-
-This module parses response data into the following format. Future
-versions may support other schemas and/or file types. It also parses the data
+`quandl-eod-helper` fetches, extracts and parses time-series stock data from the [Quandl](https://www.quandl.com/) API (only `database_code` EOD supported). It also fills the data
 such that weekends and holidays will be populated with the stock price data from
-the last day from which data is available.
+the last day from which data is available. Future
+versions may support different schemas, file types, and/or database_codes.
 
-Format (full example is shown at bottom of README):
+Consult the Quandl time-series [API Docs](https://docs.quandl.com/docs/time-series)
+ for information on the API.
+
+Output Format (full example is shown at bottom of README):
 ```
 {
   dataTypes: [...],
@@ -41,16 +40,17 @@ Format (full example is shown at bottom of README):
 }
 ```
 
-Directions for getting started:
+# Installation
 
-**Install the following dependencies:**
+```
+npm install --save quandl-eod-helper
+```
 
-- isomorphic-fetch, dot-env, moment:
-```
-npm install isomorphic-fetch
-npm install dot-env
-npm install moment
-```
+**quandl-eod-helper has the following npm dependencies:**
+
+`isomorphic-fetch`, `dot-env`, `moment`
+
+# Setup and Configuration
 
 **Place your Quandl api key in a `.env` file.**
 
@@ -74,26 +74,19 @@ either passing in properly formatted data or fetching first.
 
 ```
 const year = '2016'
-````
-...yyyy string format
-
-```
 const tickers = ['AAPL', 'MSFT']
-````
-...as an array of tickers... check the Quandl Docs for available options.
-```
 const eodData = {}
 ```
-...an option to input your own API response data if you do not want to use
-this module's native 'fetch' method.
+`year` as 'yyyy' string format
+`tickers` as an array of tickers... check the Quandl Docs for available options.
+`eodData` is an option to input your own API response data if you do not want to use
+this module's native 'fetch' method. Ensure it's in the same JSON format that Quandl returns.
 
 ```
-Eod.config(year, tickers)
+Eod.config({ year, tickers })
+const Eod = new quandleEodHelper({ year, tickers })
 ```
-```
-const Eod = new quandleEodHelper(year, tickers)
-```
-...example of configuration using the constructor or the `config()` method.
+...example of configuration using **either** the constructor or the `config()` method.
 Note: we are not passing in the optional eodData parameter.
 
 
@@ -105,16 +98,18 @@ Eod.setTickers(tickers)
 Eod.setEodData(eodData)
 ```
 
+# Usage
+
 **Fetch the data from Quandl.**
 
-Data is stored within the `Eod` instance.
+When fetching, data is stored within the `Eod` instance.
 ```
 Eod.fetch()
 ```
 
-**Your data should now be available for use, using the Eod.data() method!**
+**Your data should now be available for use, using the `Eod.data()` method!**
 
-Note: If you configured your own Quandl API data, you can use Eod.data() now (skip the previous 'fetch' step) to parse that data.
+Note: If you configured your own Quandl API data, you can use Eod.data() now (skip the previous 'fetch' step) to just parse that data.
 
 Example response from our configurations:
 ```

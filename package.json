@@ -1,8 +1,8 @@
 {
   "name": "quandl-eod-helper",
-  "version": "1.2.1",
+  "version": "1.2.2",
   "description":
-    "Easily fetch and parse data from the Quandl api using database_code EOD.",
+    "Fetch, extract and parse time-series stock data from the Quandl API",
   "main": "index.js",
   "repository": {
     "type": "git",
@@ -10,11 +10,16 @@
   },
   "author":
     "Ian Halverson <HalversonCode@gmail.com> (http://idhalverson.github.io)",
+  "_npmUser": {
+    "name": "idhalverson",
+    "email": "halversoncode@gmail.com"
+  },
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/IDHalverson/quandl-eod-helper/issues"
   },
-  "homepage": "https://github.com/IDHalverson/quandl-eod-helper#readme",
+  "homepage": "https://github.com/IDHalverson/quandl-eod-helper",
+  "keywords": ["quandl", "eod", "helper", "stocks", "parser", "fetch"],
   "dependencies": {
     "dotenv": "^4.0.0",
     "isomorphic-fetch": "^2.2.1",
