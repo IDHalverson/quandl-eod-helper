@@ -3,7 +3,7 @@
 
 See it on [NPM](https://www.npmjs.com/package/quandl-eod-helper)
 
-`quandl-eod-helper` fetches, extracts and parses time-series stock data from the [Quandl](https://www.quandl.com/) API (only `database_code` EOD supported). It also fills the data
+Fetch, extract and parse time-series stock data from the [Quandl](https://www.quandl.com/) API (only `database_code` EOD supported). It also fills the data
 such that weekends and holidays will be populated with the stock price data from
 the last day from which data is available. Future
 versions may support different schemas, file types, and/or database_codes.
@@ -75,7 +75,7 @@ either passing in properly formatted data or fetching first.
 ```
 const year = '2016'
 const tickers = ['AAPL', 'MSFT']
-const eodData = {}
+const eodData = {} //<--very optional
 ```
 `year` as 'yyyy' string format
 `tickers` as an array of tickers... check the Quandl Docs for available options.
