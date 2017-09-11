@@ -80,9 +80,15 @@ class Eod {
   }
 
   fetch() {
-    fetcher(this.year, this.tickers).then(data => {
-      this.eodData = data;
-      console.log(`Fetched ${data.length} stocks successfully!`);
+    return new Promise((resolve, reject) => {
+      fetcher(this.year, this.tickers).then(data => {
+        this.eodData = data;
+        console.log(`Fetched ${data.length} stocks successfully!`);
+        resolve();
+      });
+    }).catch(e => {
+      console.error(e);
+      reject(e);
     });
   }
 
