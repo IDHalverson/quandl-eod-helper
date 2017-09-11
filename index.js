@@ -84,7 +84,7 @@ class Eod {
       fetcher(this.year, this.tickers).then(data => {
         this.eodData = data;
         console.log(`Fetched ${data.length} stocks successfully!`);
-        resolve();
+        resolve(data);
       });
     }).catch(e => {
       console.error(e);

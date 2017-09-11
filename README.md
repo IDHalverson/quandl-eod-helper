@@ -103,12 +103,15 @@ Eod.setEodData(eodData)
 
 **Fetch the data from Quandl.**
 
-When fetching, data is stored within the `Eod` instance.
+When fetching, data is stored within the `Eod` instance. Fetching returns a promise, which resolves the raw JSON data from Quandl.
 ```
 Eod.fetch()
+.then((data) => {
+  console.log(data) //raw JSON response
+  })
 ```
 
-**Your data should now be available for use, using the `Eod.data()` method!**
+**Your parsed data should now be available for use, using the `Eod.data()` method!**
 
 Note: If you configured your own Quandl API data, you can use Eod.data() now (skip the previous 'fetch' step) to just parse that data.
 
